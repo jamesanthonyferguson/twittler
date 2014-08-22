@@ -3,6 +3,21 @@
   <head>
     <script src="jquery.js"></script>
     <script src="data_generator.js"></script>
+    <style> 
+    .tweet {
+      border: 1px solid blue;
+      padding: 10px;
+      margin: 2px;
+      font-size: 16pt;
+    }
+    .datetime {
+      font-size: 10pt;
+      color: blue;
+    }
+    .user {
+      font-size: 12pt;
+    }
+    </style>
   </head>
   <body>
     <script>
@@ -10,14 +25,17 @@
       $(document).ready(function(){
         var $body = $('body');
         $body.html('');
+        var heading = $('<h1>Twittler</h1>');
+        heading.appendTo($body);
 
         var update = function() {
+          clear();
           var index = streams.home.length - 1;
-          while(index >= 0){
+          var limit = streams.home.length - 11;
+          while(index >= limit){
             var tweet = streams.home[index];
             var now = new Date();
-            var $tweet = $('<div></div>');
-            $tweet.text('@' + tweet.user + ': ' + tweet.message + ' at ' + now.getHours() + ':' +now.getMinutes() + ' ' + (now.getMonth() + 1) + '/' + now.getDate() + '/' + now.getFullYear());
+            var $tweet = $('<div class="tweet"><span class="user">@' + tweet.user + '</span>: ' + tweet.message + '<span class="datetime"> at ' + now.getHours() + ':' +now.getMinutes() + ' on ' + (now.getMonth() + 1) + '/' + now.getDate() + '/' + now.getFullYear() + '</span></div>');
             $tweet.appendTo($body);
             index -= 1;
           }
@@ -27,6 +45,8 @@
 
       });
 
+      var clear = function() {
+        $('.tweet').remove();
+      };
     </script>
   </body>
-</html>
