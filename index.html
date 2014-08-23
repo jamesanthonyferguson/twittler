@@ -4,18 +4,60 @@
     <script src="jquery.js"></script>
     <script src="data_generator.js"></script>
     <style> 
+    body {
+      background: #bdd
+    }
+    div {
+      width: 800px;
+      vertical-align: middle;
+      border-radius: 15px;
+      margin: 3px auto;
+    }
+    .small {
+      border: 1px solid #38a;
+      text-align: center;
+      font-size: 14pt;
+      background: #fff;
+      width: 200px;
+      border-radius: 30px;
+      font-weight: bold;
+      color: #d16;
+      margin:3px 0 14px 204px;
+    } 
+    .small:hover {
+      background: #dee;
+      cursor: pointer;
+      cursor: hand;
+    }
+
     .tweet {
-      border: 1px solid blue;
-      padding: 10px;
-      margin: 2px;
+      border: 1px solid #38a;
+      padding: 10px 10px 10px 50px;
       font-size: 16pt;
+      background: #eff;
+    }
+    span {
+      background: #eff;
     }
     .datetime {
       font-size: 10pt;
-      color: blue;
+      color: #478;
     }
     .user {
       font-size: 12pt;
+      text-decoration: underline;
+      font-weight: bold;
+    }
+    .user:hover{
+      cursor: pointer;
+      cursor: hand;
+    }
+    h1 {
+      text-align: center;
+      color: #fff;
+      font-size: 56px;
+      margin-top: 18px;
+      margin-bottom: 4px;
     }
     </style>
   </head>
@@ -27,6 +69,8 @@
         $body.html('');
         var heading = $('<h1>Twittler</h1>');
         heading.appendTo($body);
+        var button = $('<div class="small"><p>Update Tweets</p></div>')
+        button.appendTo($body);
 
         var update = function() {
           clear();
@@ -39,14 +83,37 @@
             $tweet.appendTo($body);
             index -= 1;
           }
-          setTimeout(update,5000);
         }
         update();
 
+        var userUpdate = function(username){
+          clear();
+          var index = streams.home.length - 1;
+          while(index >= 0){
+            var tweet = streams.home[index];
+            var now = new Date();
+            if (tweet.user == username) {
+              var $tweet = $('<div class="tweet"><span class="user">@' + tweet.user + '</span>: ' + tweet.message + '<span class="datetime"> at ' + now.getHours() + ':' +now.getMinutes() + ' on ' + (now.getMonth() + 1) + '/' + now.getDate() + '/' + now.getFullYear() + '</span></div>');
+              $tweet.appendTo($body);
+            }
+            index -= 1;
+          }
+        }
+
+
+      $(document).on('click', '.user', function(){
+        var username = $(this).text().slice(1);
+        userUpdate(username);
+      })
+      $(document).on('click', '.small', function(){
+        update();
+      })
       });
 
       var clear = function() {
         $('.tweet').remove();
       };
+
+
     </script>
   </body>
